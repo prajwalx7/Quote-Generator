@@ -9,19 +9,33 @@ class MyDrawer extends StatelessWidget {
     return Drawer(
       backgroundColor: Colors.white,
       child: ListView(
+        padding: EdgeInsets.zero,
         children: [
           const UserAccountsDrawerHeader(
             accountName: Text(
               'Prajwal Dudhatkar',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.black,
+              ),
             ),
-            accountEmail: Text('workwithprajwal@yahoo.com'),
+            accountEmail: Text(
+              'workwithprajwal@yahoo.com',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.black,
+              ),
+            ),
             currentAccountPicture: CircleAvatar(
-              backgroundImage: AssetImage('assets/images/marc.jpeg'),
+              backgroundImage: AssetImage(
+                'assets/images/marc.jpeg',
+              ),
             ),
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/bg1.jpeg'),
+                image: AssetImage(
+                  'assets/images/bg.jpeg',
+                ),
                 fit: BoxFit.cover,
               ),
             ),
