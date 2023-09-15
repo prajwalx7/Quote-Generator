@@ -2,36 +2,31 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class QuoteService {
-  final String apiKey;
   final String apiUrl;
 
-  QuoteService(this.apiKey)
-      : apiUrl = 'https://api.api-ninjas.com/v1/quotes?category=inspirational';
+  QuoteService(this.apiUrl);
 
-  Future<Map<String, dynamic>> fetchQuoteAndImage() async {
+  Future<Map<String, dynamic>> fetchStoicismQuote() async {
     try {
       final response = await http.get(
         Uri.parse(apiUrl),
-        headers: {
-          'X-Api-Key': apiKey, // Use the apiKey variable here
-        },
       );
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body);
-        final quote = jsonData[0]['quote'];
-        final author = jsonData[0]['author'];
+        final decodedResponse = utf8.decode(response.bodyBytes);
+        final jsonData = json.decode(decodedResponse);
+        final author = jsonData['author'];
+        final quote = jsonData['quote'];
 
         return {
           'quote': quote,
           'author': author,
         };
       } else {
-        throw Exception('Failed to load data');
+        throw Exception('Failed to load Stoic quote');
       }
     } catch (e) {
       // Handle error
-      // print('Error fetching data: $e');
       return {
         'quote': '',
         'author': '',

@@ -13,14 +13,14 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String todaysQuote = '';
   List<String> favoriteQuotes = [];
+  final QuoteService _stoicismQuoteService =
+      QuoteService('https://api.themotivate365.com/stoic-quote');
 
   void addToFavorites(String quote) {
-    // Check if the quote already exists in the favorites list
     if (!favoriteQuotes.contains(quote)) {
       favoriteQuotes.add(quote);
     }
 
-    // Update the state of the widget
     setState(() {});
   }
 
@@ -40,9 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {});
   }
 
-  final QuoteService _quoteService = QuoteService(
-      'Ai5dgMKmudETKI/GVZwddg==YtA1J8YwURgr8QuD'); // Replace with your actual API key
-
   @override
   void initState() {
     super.initState();
@@ -51,12 +48,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> refreshQuote() async {
     try {
-      final data = await _quoteService.fetchQuoteAndImage();
+      final data = await _stoicismQuoteService.fetchStoicismQuote();
+      final quote = data['quote'];
+      final author = data['author'];
       setState(() {
-        todaysQuote = data['quote'];
+        todaysQuote = '$quote\n-$author';
       });
     } catch (e) {
-      // print('Error fetching data: $e');
+      // Handle error
     }
   }
 
@@ -65,13 +64,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.purple[100],
       drawer: MyDrawer(
-        favoriteQuotes: favoriteQuotes, // Pass the favorite quotes list here
+        favoriteQuotes: favoriteQuotes,
         addToFavoritesCallback: (quote) {
           addToFavorites(quote);
         },
         removeFromFavorites: (index) {
-          removeFromFavorites(
-              index); // Call the removeFromFavorites method in HomeScreen
+          removeFromFavorites(index);
         },
       ),
       body: Stack(
@@ -79,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
           SafeArea(
             child: Builder(builder: (context) {
               return Align(
-                alignment: Alignment.topLeft, // Adjust alignment as needed
+                alignment: Alignment.topLeft,
                 child: IconButton(
                   icon: const Icon(
                     Iconsax.menu,
@@ -98,18 +96,33 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                 //position of quotes
                 padding: const EdgeInsets.only(
-                  top: 250,
+                  top: 300,
                   left: 16,
                   right: 16,
                 ),
                 child: SingleChildScrollView(
-                  child: Text(
-                    todaysQuote,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
                     ),
-                    textAlign: TextAlign.center,
+                    child: Text(
+                      todaysQuote,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
               ),
@@ -119,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Container(
                     margin: const EdgeInsets.only(
-                      bottom: 20.0, // Adjust the bottom margin as needed
+                      bottom: 20.0,
                     ),
                     child: IconButton(
                       icon: const Icon(
@@ -127,10 +140,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: Colors.black,
                       ),
                       onPressed: () {
-                        final String currentQuote =
-                            todaysQuote; // Get the current quote
+                        final String currentQuote = todaysQuote;
                         if (currentQuote.isNotEmpty) {
-                          addToFavorites(currentQuote); // Add to favorites
+                          addToFavorites(currentQuote);
                         }
                       },
                       style: ButtonStyle(
@@ -143,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Container(
                     margin: const EdgeInsets.only(
-                      bottom: 20.0, // Adjust the bottom margin as needed
+                      bottom: 20.0,
                     ),
                     child: IconButton(
                       icon: const Icon(
@@ -160,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Container(
                     margin: const EdgeInsets.only(
-                      bottom: 20.0, // Adjust the bottom margin as needed
+                      bottom: 20.0,
                     ),
                     child: IconButton(
                       icon: const Icon(
