@@ -80,10 +80,19 @@ class FavoritePageState extends State<FavoritePage> {
               children: <Widget>[
                 Expanded(
                   child: TextField(
+                    cursorColor: Colors.black,
                     controller: _quoteController,
                     decoration: InputDecoration(
                       labelText: 'Add your own Quote',
-                      focusColor: Colors.purple[100],
+                      labelStyle: const TextStyle(color: Colors.black),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: const BorderSide(color: Colors.black),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: const BorderSide(color: Colors.black),
+                      ),
                     ),
                   ),
                 ),
