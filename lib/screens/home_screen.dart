@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:quote_ofthe_day/core/services.dart';
 import 'package:quote_ofthe_day/screens/drawer.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -10,96 +11,130 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String todaysQuote =
-      "My Unmatched Perspicacity Coupled with sheer Indefeagabiltiy make me a feared opponent in realme that has ever existed";
-  String coverImage = "assets/images/god.jpeg";
+  String todaysQuote = '';
 
-  void refershQuote() {
-    setState(() {
-      todaysQuote = "This is a new quote!";
-    });
+  final QuoteService _quoteService = QuoteService(
+      'Ai5dgMKmudETKI/GVZwddg==YtA1J8YwURgr8QuD'); // Replace with your actual API key
+
+  @override
+  void initState() {
+    super.initState();
+    refreshQuote();
+  }
+
+  Future<void> refreshQuote() async {
+    try {
+      final data = await _quoteService.fetchQuoteAndImage();
+      setState(() {
+        todaysQuote = data['quote'];
+      });
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.purple[100],
       drawer: const MyDrawer(),
       body: Stack(
         children: [
-          Image.asset(
-            coverImage,
-            fit: BoxFit.cover,
-            height: double.infinity,
-            width: double.infinity,
-            alignment: Alignment.center,
-          ),
-          Container(
-            color: Colors.transparent,
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 250, horizontal: 75),
-              child: Text(
-                todaysQuote,
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
+          SafeArea(
+            child: Builder(builder: (context) {
+              return Align(
+                alignment: Alignment.topLeft, // Adjust alignment as needed
+                child: IconButton(
+                  icon: const Icon(
+                    Iconsax.menu,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  },
                 ),
-                textAlign: TextAlign.center,
-              ),
-            ),
+              );
+            }),
           ),
-          Positioned(
-            left: 0.0,
-            right: 0.0,
-            bottom: 20.0,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 45),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                //position of quotes
+                padding: const EdgeInsets.only(
+                  top: 250,
+                  left: 16,
+                  right: 16,
+                ),
+                child: SingleChildScrollView(
+                  child: Text(
+                    todaysQuote,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              const Spacer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.transparent),
+                  Container(
+                    margin: const EdgeInsets.only(
+                      bottom: 20.0, // Adjust the bottom margin as needed
                     ),
-                    child: const Icon(Iconsax.heart),
+                    child: IconButton(
+                      icon: const Icon(
+                        Iconsax.heart,
+                        color: Colors.black,
+                      ),
+                      onPressed: () {},
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Colors.transparent),
+                        elevation: MaterialStateProperty.all<double>(0),
+                      ),
+                    ),
                   ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.transparent),
+                  Container(
+                    margin: const EdgeInsets.only(
+                      bottom: 20.0, // Adjust the bottom margin as needed
                     ),
-                    child: const Icon(Iconsax.refresh),
+                    child: IconButton(
+                      icon: const Icon(
+                        Iconsax.refresh,
+                        color: Colors.black,
+                      ),
+                      onPressed: refreshQuote,
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Colors.transparent),
+                        elevation: MaterialStateProperty.all<double>(0),
+                      ),
+                    ),
                   ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.transparent),
+                  Container(
+                    margin: const EdgeInsets.only(
+                      bottom: 20.0, // Adjust the bottom margin as needed
                     ),
-                    child: const Icon(Iconsax.share),
+                    child: IconButton(
+                      icon: const Icon(
+                        Iconsax.share,
+                        color: Colors.black,
+                      ),
+                      onPressed: () {},
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Colors.transparent),
+                        elevation: MaterialStateProperty.all<double>(0),
+                      ),
+                    ),
                   ),
                 ],
               ),
-            ),
-          ),
-          SafeArea(
-            child: Builder(
-              builder: (BuildContext builderContext) {
-                return IconButton(
-                  icon: const Icon(
-                    Iconsax.menu,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    // Open the drawer
-                    Scaffold.of(builderContext).openDrawer();
-                  },
-                );
-              },
-            ),
+            ],
           ),
         ],
       ),
