@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:quote_ofthe_day/screens/favourite.dart';
 
 class MyDrawer extends StatelessWidget {
-  const MyDrawer({super.key});
+  final List<String> favoriteQuotes;
+  final Function(String) addToFavoritesCallback;
+  final Function(int) removeFromFavorites;
+
+  const MyDrawer({
+    Key? key,
+    required this.favoriteQuotes,
+    required this.addToFavoritesCallback,
+    required this.removeFromFavorites,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,12 +51,27 @@ class MyDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: const Text("Favourite"),
+            title: const Text("Favorite"),
             leading: const Icon(
               Iconsax.heart,
               color: Colors.black,
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).pop(); // Close the drawer
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => FavoritePage(
+                    favoriteQuotes: favoriteQuotes,
+                    onAdd: (quote) {
+                      addToFavoritesCallback(quote);
+                    },
+                    onRemove: (index) {
+                      removeFromFavorites(index);
+                    },
+                  ),
+                ),
+              );
+            },
           ),
           ListTile(
             title: const Text("Invite Friends"),

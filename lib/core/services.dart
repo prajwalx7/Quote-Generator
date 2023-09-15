@@ -31,7 +31,7 @@ class QuoteService {
       }
     } catch (e) {
       // Handle error
-      print('Error fetching data: $e');
+      // print('Error fetching data: $e');
       return {
         'quote': '',
         'author': '',

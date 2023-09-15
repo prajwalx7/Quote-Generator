@@ -12,6 +12,33 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String todaysQuote = '';
+  List<String> favoriteQuotes = [];
+
+  void addToFavorites(String quote) {
+    // Check if the quote already exists in the favorites list
+    if (!favoriteQuotes.contains(quote)) {
+      favoriteQuotes.add(quote);
+    }
+
+    // Update the state of the widget
+    setState(() {});
+  }
+
+  void removeFromFavorites(int index) {
+    if (favoriteQuotes.isNotEmpty &&
+        0 <= index &&
+        index < favoriteQuotes.length) {
+      favoriteQuotes.removeAt(index);
+    }
+
+    setState(() {});
+  }
+
+  void removeQuote(String quote) {
+    favoriteQuotes.remove(quote);
+
+    setState(() {});
+  }
 
   final QuoteService _quoteService = QuoteService(
       'Ai5dgMKmudETKI/GVZwddg==YtA1J8YwURgr8QuD'); // Replace with your actual API key
@@ -29,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
         todaysQuote = data['quote'];
       });
     } catch (e) {
-      print('Error fetching data: $e');
+      // print('Error fetching data: $e');
     }
   }
 
@@ -37,7 +64,16 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.purple[100],
-      drawer: const MyDrawer(),
+      drawer: MyDrawer(
+        favoriteQuotes: favoriteQuotes, // Pass the favorite quotes list here
+        addToFavoritesCallback: (quote) {
+          addToFavorites(quote);
+        },
+        removeFromFavorites: (index) {
+          removeFromFavorites(
+              index); // Call the removeFromFavorites method in HomeScreen
+        },
+      ),
       body: Stack(
         children: [
           SafeArea(
@@ -90,10 +126,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         Iconsax.heart,
                         color: Colors.black,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        final String currentQuote =
+                            todaysQuote; // Get the current quote
+                        if (currentQuote.isNotEmpty) {
+                          addToFavorites(currentQuote); // Add to favorites
+                        }
+                      },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
-                            Colors.transparent),
+                          Colors.transparent,
+                        ),
                         elevation: MaterialStateProperty.all<double>(0),
                       ),
                     ),
