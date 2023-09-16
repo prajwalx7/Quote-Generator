@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:quote_ofthe_day/core/services.dart';
 import 'package:quote_ofthe_day/screens/drawer.dart';
+import 'dart:ui' as ui;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, Key? keyy});
@@ -13,12 +15,36 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String todaysQuote = '';
-  late String imageAsset = 'images/bg0.jpg'; //default background
-
-  final APIService _apiService = APIService(
-      'cdf158eb46msh94e5e46b346b00ap1b98f3jsnfac3a805ee03'); //diffusion API
+  late String imageAsset = 'images/bg0.jpg'; // default background
 
   List<String> favoriteQuotes = [];
+
+  Future<Map<String, String>> fetchRandomQuote() async {
+    try {
+      final quotesJson = await rootBundle.loadString('assets/quotes.json');
+      final List<dynamic> quotes = json.decode(quotesJson);
+
+      if (quotes.isNotEmpty) {
+        final randomIndex = Random().nextInt(quotes.length);
+        final quoteData = quotes[randomIndex];
+        final quote = quoteData['quote'];
+        final author = quoteData['author'];
+
+        return {
+          'quote': quote,
+          'author': author,
+        };
+      } else {
+        throw Exception('No quotes found');
+      }
+    } catch (e) {
+      // print('Error: $e');
+      return {
+        'quote': '',
+        'author': '',
+      };
+    }
+  }
 
   void addToFavorites(String quote) {
     setState(() {
@@ -44,20 +70,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> refreshQuote() async {
     try {
-      final data = await _apiService.fetchQuote();
-      final author = data['author'];
+      final Map<String, String?> quoteData = await fetchRandomQuote();
+      final String? quote = quoteData['quote'];
+      final String? author = quoteData['author'];
 
-      // Fetch a Stoicism-related quote
-      final stoicQuoteData = await _apiService.fetchQuote(topic: 'stoicism');
-      final stoicQuote = stoicQuoteData['quote'];
+      if (quote != null) {
+        final randomImageIndex = Random().nextInt(16);
+        imageAsset = 'images/bg${randomImageIndex.toString()}.jpg';
 
-      // I used this method to select a random background image from assets
-      final randomImageIndex = Random().nextInt(16);
-      imageAsset = 'images/bg$randomImageIndex.jpg';
-
-      setState(() {
-        todaysQuote = '$stoicQuote \n- $author';
-      });
+        setState(() {
+          todaysQuote = author != null ? '$quote \n- $author' : quote;
+        });
+      } else {
+        // Handle the case where the quote is null
+      }
     } catch (e) {
       // Handle error
     }
@@ -83,6 +109,14 @@ class _HomeScreenState extends State<HomeScreen> {
             fit: BoxFit.cover,
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
+          ),
+          BackdropFilter(
+            filter: ui.ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+            child: Container(
+              color: Colors.black.withOpacity(0),
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+            ),
           ),
           SafeArea(
             //menu icon*********************
