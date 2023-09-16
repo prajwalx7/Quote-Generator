@@ -38,13 +38,13 @@ class MyDrawer extends StatelessWidget {
             ),
             currentAccountPicture: CircleAvatar(
               backgroundImage: AssetImage(
-                'assets/images/marc.jpeg',
+                'assets/images/user.jpg',
               ),
             ),
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(
-                  'assets/images/bg.jpeg',
+                  'assets/images/drawerbg.jpg',
                 ),
                 fit: BoxFit.cover,
               ),
