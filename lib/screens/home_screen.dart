@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:like_button/like_button.dart';
 import 'package:quote_ofthe_day/screens/drawer.dart';
 import 'dart:ui' as ui;
 import 'package:share/share.dart';
@@ -17,6 +18,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String todaysQuote = '';
   late String imageAsset = 'images/bg0.jpg'; // default background
+  bool isLiked = false;
 
   List<String> favoriteQuotes = [];
 
@@ -66,6 +68,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    // Initialize isLiked based on whether todaysQuote is in favoriteQuotes
+    isLiked = favoriteQuotes.contains(todaysQuote);
     refreshQuote();
   }
 
@@ -92,6 +96,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void shareQuote(String quote) {
     Share.share(quote);
+  }
+
+  void resetLikeButton() {
+    setState(() {
+      isLiked = false;
+    });
   }
 
   @override
@@ -170,23 +180,24 @@ class _HomeScreenState extends State<HomeScreen> {
                     margin: const EdgeInsets.only(
                       bottom: 20.0,
                     ),
-                    child: IconButton(
-                      icon: const Icon(
-                        Iconsax.heart,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        final String currentQuote = todaysQuote;
-                        if (currentQuote.isNotEmpty) {
-                          addToFavorites(currentQuote);
-                        }
+                    child: LikeButton(
+                      isLiked: isLiked,
+                      onTap: (bool isCurrentlyLiked) {
+                        setState(() {
+                          if (isCurrentlyLiked) {
+                            // Remove the quote from favorites
+                            removeFromFavorites(
+                                favoriteQuotes.indexOf(todaysQuote));
+                          } else {
+                            // Add the quote to favorites
+                            addToFavorites(todaysQuote);
+                          }
+                          // Toggle the like state
+                          isLiked = !isCurrentlyLiked;
+                        });
+
+                        return Future.value(!isCurrentlyLiked);
                       },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          Colors.transparent,
-                        ),
-                        elevation: MaterialStateProperty.all<double>(0),
-                      ),
                     ),
                   ),
                   Container(
@@ -198,10 +209,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         Iconsax.refresh,
                         color: Colors.white,
                       ),
-                      onPressed: refreshQuote,
+                      onPressed: () {
+                        resetLikeButton(); // Reset the like button state
+                        refreshQuote();
+                      },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
-                            Colors.transparent),
+                          Colors.transparent,
+                        ),
                         elevation: MaterialStateProperty.all<double>(0),
                       ),
                     ),

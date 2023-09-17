@@ -20,16 +20,8 @@ class FavoritePage extends StatefulWidget {
 class FavoritePageState extends State<FavoritePage> {
   final TextEditingController _quoteController = TextEditingController();
 
-  @override
-  void dispose() {
-    _quoteController.dispose();
-    super.dispose();
-  }
-
   void addToFavorites(String quote) {
-    setState(() {
-      widget.favoriteQuotes.add(quote);
-    });
+    setState(() {});
 
     widget.onAdd(quote);
   }
@@ -59,10 +51,7 @@ class FavoritePageState extends State<FavoritePage> {
                   trailing: IconButton(
                     icon: const Icon(Iconsax.close_circle),
                     onPressed: () {
-                      // Remove the quote from the favorites list
                       widget.favoriteQuotes.removeAt(index);
-
-                      // Update the state of the widget
                       setState(() {});
                     },
                   ),
@@ -97,14 +86,13 @@ class FavoritePageState extends State<FavoritePage> {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Iconsax.add),
-                  onPressed: () {
-                    if (_quoteController.text.isNotEmpty) {
-                      addToFavorites(_quoteController.text);
+                    icon: const Icon(Iconsax.add),
+                    onPressed: () {
+                      if (_quoteController.text.isNotEmpty) {
+                        addToFavorites(_quoteController.text);
+                      }
                       _quoteController.clear();
-                    }
-                  },
-                ),
+                    }),
               ],
             ),
           ),

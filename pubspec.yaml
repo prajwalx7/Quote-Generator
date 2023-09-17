@@ -37,6 +37,7 @@ dependencies:
   iconsax: ^0.0.8
   google_fonts: ^5.1.0
   share: ^2.0.4
+  like_button: ^2.0.5
 
 dev_dependencies:
   flutter_test:
