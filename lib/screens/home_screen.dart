@@ -73,6 +73,15 @@ class _HomeScreenState extends State<HomeScreen> {
     refreshQuote();
   }
 
+  Future<bool> doesAssetExist(String assetName) async {
+    try {
+      await rootBundle.load(assetName);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
   Future<void> refreshQuote() async {
     try {
       final Map<String, String?> quoteData = await fetchRandomQuote();
@@ -80,8 +89,11 @@ class _HomeScreenState extends State<HomeScreen> {
       final String? author = quoteData['author'];
 
       if (quote != null) {
-        final randomImageIndex = Random().nextInt(16);
+        final randomImageIndex = Random().nextInt(106);
         imageAsset = 'images/bg${randomImageIndex.toString()}.jpg';
+        if (!await doesAssetExist(imageAsset)) {
+          imageAsset = 'images/bg${randomImageIndex.toString()}.jpeg';
+        }
 
         setState(() {
           todaysQuote = author != null ? '$quote \n- $author' : quote;
@@ -107,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.purple[100],
+      backgroundColor: Colors.black,
       drawer: MyDrawer(
         favoriteQuotes: favoriteQuotes,
         addToFavoritesCallback: (quote) {
@@ -138,14 +150,17 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Builder(builder: (context) {
               return Align(
                 alignment: Alignment.topLeft,
-                child: IconButton(
-                  icon: const Icon(
-                    Iconsax.menu,
-                    color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: IconButton(
+                    icon: const Icon(
+                      Iconsax.menu,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer();
+                    },
                   ),
-                  onPressed: () {
-                    Scaffold.of(context).openDrawer();
-                  },
                 ),
               );
             }),
@@ -197,6 +212,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         });
 
                         return Future.value(!isCurrentlyLiked);
+                      },
+                      likeBuilder: (bool isLiked) {
+                        return Icon(
+                          Icons.favorite,
+                          color: isLiked
+                              ? Colors.red
+                              : Colors.white, // Change the default color here
+                          size: 30,
+                        );
                       },
                     ),
                   ),

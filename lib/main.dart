@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quote_ofthe_day/screens/home_screen.dart';
-
+//21,33,
 void main() {
   runApp(const MyApp());
 }
