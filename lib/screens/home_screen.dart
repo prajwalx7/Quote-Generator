@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:quote_ofthe_day/screens/drawer.dart';
 import 'dart:ui' as ui;
+import 'package:share/share.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, Key? keyy});
@@ -87,6 +88,10 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       // Handle error
     }
+  }
+
+  void shareQuote(String quote) {
+    Share.share(quote);
   }
 
   @override
@@ -210,7 +215,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         Iconsax.share,
                         color: Colors.white,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        shareQuote(todaysQuote);
+                      },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
                             Colors.transparent),
