@@ -58,7 +58,7 @@ class FavoritePageState extends State<FavoritePage> {
                 );
               },
               separatorBuilder: (context, index) {
-                // Add a 10 pixel space between each quote
+                // Add space between each quote
                 return const Divider(height: 25);
               },
             ),
@@ -91,7 +91,7 @@ class FavoritePageState extends State<FavoritePage> {
                       if (_quoteController.text.isNotEmpty) {
                         addToFavorites(_quoteController.text);
                       }
-                      _quoteController.clear();
+                      _quoteController.clear();//clear textfield when added to fav
                     }),
               ],
             ),

@@ -17,31 +17,42 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String todaysQuote = '';
-  late String imageAsset = 'images/bg0.jpg'; // default background
+  late String imageAsset = 'images/bg0.jpeg'; // default background
   bool isLiked = false;
 
-  List<String> favoriteQuotes = [];
+  List<String> favoriteQuotes = []; //empty list b4 adding any quotes
 
+  // Function to fetch a random quote from json
   Future<Map<String, String>> fetchRandomQuote() async {
     try {
+      // Load the JSON file containing quotes from the app's assets.
       final quotesJson = await rootBundle.loadString('assets/quotes.json');
+
+      // Parse the JSON data into a list of dynamic objects.
       final List<dynamic> quotes = json.decode(quotesJson);
 
       if (quotes.isNotEmpty) {
+        // Generate a random index to select a random quote from the list.
         final randomIndex = Random().nextInt(quotes.length);
+
+        // gets a random quote from quotes.json and store it in quoteData
         final quoteData = quotes[randomIndex];
+
+        //gets quote and author from json
         final quote = quoteData['quote'];
         final author = quoteData['author'];
 
+        // Return the quote and author as a Map
         return {
           'quote': quote,
           'author': author,
         };
       } else {
+        // If the list of quotes ie. json is empty then throw an exception.
         throw Exception('No quotes found');
       }
     } catch (e) {
-      // print('Error: $e');
+      //empty strings are return in case of errors in json
       return {
         'quote': '',
         'author': '',
@@ -49,12 +60,14 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  // add quote to favorites
   void addToFavorites(String quote) {
     setState(() {
       favoriteQuotes.add(quote);
     });
   }
 
+  // remove quote from favorites
   void removeFromFavorites(int index) {
     if (favoriteQuotes.isNotEmpty &&
         0 <= index &&
@@ -68,11 +81,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // Initialize isLiked based on whether todaysQuote is in favoriteQuotes
     isLiked = favoriteQuotes.contains(todaysQuote);
+    //if the current quote is in favorites then like button is red
     refreshQuote();
+    //when this is called the state fo like button is changed
   }
 
+  // Check if an asset exists if there ret true else false
   Future<bool> doesAssetExist(String assetName) async {
     try {
       await rootBundle.load(assetName);
@@ -82,6 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  // Fetch a new random quote and update the background image.
   Future<void> refreshQuote() async {
     try {
       final Map<String, String?> quoteData = await fetchRandomQuote();
@@ -90,10 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       if (quote != null) {
         final randomImageIndex = Random().nextInt(106);
-        imageAsset = 'images/bg${randomImageIndex.toString()}.jpg';
-        if (!await doesAssetExist(imageAsset)) {
-          imageAsset = 'images/bg${randomImageIndex.toString()}.jpeg';
-        }
+        imageAsset = 'images/bg${randomImageIndex.toString()}.jpeg';
 
         setState(() {
           todaysQuote = author != null ? '$quote \n- $author' : quote;
@@ -102,14 +115,16 @@ class _HomeScreenState extends State<HomeScreen> {
         // Handle the case where the quote is null
       }
     } catch (e) {
-      // Handle error
+      // Handle potential errors when fetching quote.
     }
   }
 
+  // Share a quote using the Share package.
   void shareQuote(String quote) {
     Share.share(quote);
   }
 
+  // Reset the like button state.
   void resetLikeButton() {
     setState(() {
       isLiked = false;
@@ -137,6 +152,8 @@ class _HomeScreenState extends State<HomeScreen> {
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
           ),
+
+          //background blur widget
           BackdropFilter(
             filter: ui.ImageFilter.blur(sigmaX: 2, sigmaY: 2),
             child: Container(
@@ -146,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           SafeArea(
-            //menu icon*********************
+            // Menu button for opening the drawer.
             child: Builder(builder: (context) {
               return Align(
                 alignment: Alignment.topLeft,
@@ -166,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
             }),
           ),
           Column(
-            //***********************position of quotes**************************
+            // Position of quote
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
@@ -187,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const Spacer(),
-              // ********************buttons*******************
+              // Buttons - like,refresh,share
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -200,14 +217,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       onTap: (bool isCurrentlyLiked) {
                         setState(() {
                           if (isCurrentlyLiked) {
-                            // Remove the quote from favorites
+                            // Remove the quote from favorites.
                             removeFromFavorites(
                                 favoriteQuotes.indexOf(todaysQuote));
                           } else {
-                            // Add the quote to favorites
+                            // Add the quote to favorites.
                             addToFavorites(todaysQuote);
                           }
-                          // Toggle the like state
+                          // Toggle the like state.
                           isLiked = !isCurrentlyLiked;
                         });
 
@@ -217,8 +234,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         return Icon(
                           Icons.favorite,
                           color: isLiked
-                              ? Colors.red
-                              : Colors.white, // Change the default color here
+                              ? Colors.red // like button color when presed
+                              : Colors.white, // default color of like button
                           size: 30,
                         );
                       },
@@ -234,7 +251,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: Colors.white,
                       ),
                       onPressed: () {
-                        resetLikeButton(); // Reset the like button state
+                        resetLikeButton(); // Reset the like button state.
                         refreshQuote();
                       },
                       style: ButtonStyle(
@@ -251,7 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     child: IconButton(
                       icon: const Icon(
-                        Iconsax.share,
+                        Icons.share,
                         color: Colors.white,
                       ),
                       onPressed: () {
