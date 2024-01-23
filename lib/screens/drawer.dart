@@ -17,7 +17,7 @@ class MyDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xffDCF2F1),
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -26,14 +26,14 @@ class MyDrawer extends StatelessWidget {
               'Prajwal Dudhatkar',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.black,
+                color: Colors.white,
               ),
             ),
             accountEmail: Text(
               'workwithprajwal@yahoo.com',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.black,
+                color: Colors.white,
               ),
             ),
             currentAccountPicture: CircleAvatar(
@@ -44,12 +44,16 @@ class MyDrawer extends StatelessWidget {
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(
-                  'assets/images/drawerbg.jpeg',
+                  'assets/images/drawerbg.png',
                 ),
                 fit: BoxFit.cover,
               ),
             ),
           ),
+
+
+         //Tiles
+
           ListTile(
             title: const Text("Favorite"),
             leading: const Icon(
@@ -73,6 +77,8 @@ class MyDrawer extends StatelessWidget {
               );
             },
           ),
+
+          
           ListTile(
             title: const Text("Invite Friends"),
             leading: const Icon(

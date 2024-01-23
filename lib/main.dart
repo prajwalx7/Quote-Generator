@@ -13,10 +13,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const HomeScreen(), // initial screen will be homescreen
+
+      home: const HomeScreen(), 
       theme: ThemeData(
         fontFamily: GoogleFonts.poppins().fontFamily,
-        //poppins will be the default font for entire app
       ),
     );
   }

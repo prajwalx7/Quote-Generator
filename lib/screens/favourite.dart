@@ -22,7 +22,6 @@ class FavoritePageState extends State<FavoritePage> {
 
   void addToFavorites(String quote) {
     setState(() {});
-
     widget.onAdd(quote);
   }
 
@@ -32,7 +31,7 @@ class FavoritePageState extends State<FavoritePage> {
       appBar: AppBar(
         elevation: 0.0,
         iconTheme: const IconThemeData(color: Colors.black),
-        backgroundColor: Colors.purple[100],
+        backgroundColor: const Color(0xffDCF2F1),
         title: const Text(
           'Favorite Quotes',
           style: TextStyle(color: Colors.black),
@@ -86,13 +85,15 @@ class FavoritePageState extends State<FavoritePage> {
                   ),
                 ),
                 IconButton(
-                    icon: const Icon(Iconsax.add),
-                    onPressed: () {
-                      if (_quoteController.text.isNotEmpty) {
-                        addToFavorites(_quoteController.text);
-                      }
-                      _quoteController.clear();//clear textfield when added to fav
-                    }),
+                  icon: const Icon(Iconsax.add),
+                  onPressed: () {
+                    if (_quoteController.text.isNotEmpty) {
+                      addToFavorites(_quoteController.text);
+                    }
+                    _quoteController
+                        .clear(); //clear textfield when added to fav
+                  },
+                ),
               ],
             ),
           ),
