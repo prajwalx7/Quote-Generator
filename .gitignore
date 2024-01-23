@@ -11,6 +11,8 @@
 migrate_working_dir/
 .env
 
+constants.dart
+
 # IntelliJ related
 *.iml
 *.ipr

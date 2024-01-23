@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:quote_ofthe_day/constants.dart';
 
 class UserService {
-  static String apiKey =
-      dotenv.env['API_KEY'] ?? 'default_value_if_not_present';
+  static String apiKey = QUOTE_API_KEY;
 
   static const String apiUrl =
       'https://api.api-ninjas.com/v1/quotes?category=happiness';
@@ -38,7 +37,8 @@ class UserService {
         throw Exception('HTTP Failed with status code: ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception('Error fetching quote: $e');
+      print('Error in getSingleQuote: $e'); // Print error for debugging
+      throw e; // Rethrow the caught exception for further analysis
     }
   }
 }

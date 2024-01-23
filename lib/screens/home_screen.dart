@@ -1,9 +1,14 @@
+import 'dart:convert';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:quote_ofthe_day/constants.dart';
 import 'package:quote_ofthe_day/screens/drawer.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:quote_ofthe_day/user_Service.dart';
 import 'package:quote_ofthe_day/user_controls.dart';
 import 'package:share/share.dart';
+import "package:http/http.dart" as http;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, Key? keyy});
@@ -17,6 +22,9 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isLiked = false;
   List<String> favoriteQuotes = [];
 
+  String currentImage = "";
+
+  int imageCounter = 1;
   final UserService _userService = UserService();
 
   @override
@@ -27,18 +35,30 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> refreshQuote() async {
     try {
+// images
+
+      final r = await http.get(Uri.parse(
+          "$unsplashEndpoint&page=$imageCounter&per_page=1&query=philosopher"));
+
+      final data = jsonDecode(r.body);
+
+      print("image Data : ${data}");
+
+      currentImage = data['results'][0]['urls']['small'];
+
       final Map<String, String> quoteData = await _userService.getSingleQuote();
 
       if (quoteData.isNotEmpty) {
         final String quote = quoteData['quote']!;
         final String author = quoteData['author']!;
-        setState(() {
-          todaysQuote = '$quote\n- $author';
-          isLiked = false;
-        });
+
+        todaysQuote = '$quote\n- $author';
+        isLiked = false;
       } else {
         throw Exception('Quote data is empty');
       }
+      imageCounter++;
+      setState(() {});
     } catch (e) {
       print('Error fetching quote: $e');
       setState(() {
@@ -87,6 +107,23 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Stack(
         children: [
+          if (currentImage != "")
+            SizedBox(
+                height: double.infinity,
+                child: ImageFiltered(
+                  imageFilter: ImageFilter.blur(sigmaY: 10, sigmaX: 10),
+                  child: Image.network(
+                    currentImage,
+                    fit: BoxFit.fitHeight,
+                  ),
+                  
+                )),
+          if (currentImage != "")
+            Container(
+              height: double.infinity,
+              decoration: BoxDecoration(
+                  boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.2))]),
+            ),
           SafeArea(
             child: Builder(builder: (context) {
               return Align(
