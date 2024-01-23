@@ -40,11 +40,11 @@ dependencies:
   like_button: ^2.0.5
   http: ^1.1.0
   flutter_dotenv: ^5.1.0
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.13.1
   flutter_lints: ^2.0.0
 
 flutter_icons:

@@ -46,14 +46,12 @@ class _HomeScreenState extends State<HomeScreen> {
         final String author = quoteData['author']!;
         todaysQuote = '$quote\n- $author';
         isLiked = false;
-
       } else {
         throw Exception('Quote data is empty');
       }
 
       imageCounter++;
       setState(() {});
-
     } catch (e) {
       // print('Error fetching quote: $e');
       setState(
@@ -70,7 +68,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-
   void removeFromFavorites(int index) {
     if (favoriteQuotes.isNotEmpty &&
         0 <= index &&
@@ -80,11 +77,9 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {});
   }
 
-
   void shareQuote(String quote) {
     Share.share(quote);
   }
-
 
   void resetLikeButton() {
     setState(() {
@@ -92,11 +87,10 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff163020),
+      backgroundColor: Colors.black38,
       drawer: MyDrawer(
         favoriteQuotes: favoriteQuotes,
         addToFavoritesCallback: (quote) {
@@ -106,36 +100,30 @@ class _HomeScreenState extends State<HomeScreen> {
           removeFromFavorites(index);
         },
       ),
-
-
       body: Stack(
         children: [
           if (currentImage != "")
             SizedBox(
               height: double.infinity,
               child: ImageFiltered(
-                imageFilter: ImageFilter.blur(sigmaY: 10, sigmaX: 10),
+                imageFilter: ImageFilter.blur(sigmaY: 1, sigmaX: 1),
                 child: Image.network(
                   currentImage,
                   fit: BoxFit.fitHeight,
                 ),
               ),
             ),
-
-
           if (currentImage != "")
             Container(
               height: double.infinity,
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
+                    color: Colors.black.withOpacity(0.5),
                   ),
                 ],
               ),
             ),
-
-
           SafeArea(
             child: Builder(
               builder: (context) {
@@ -157,8 +145,6 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
           ),
-
-
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -172,9 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-
               const Spacer(),
-              
               UserControls(
                 isLiked: isLiked,
                 onTapLike: (isCurrentlyLiked) {
