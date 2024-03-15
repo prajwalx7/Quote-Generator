@@ -1,16 +1,27 @@
-# quote_ofthe_day
+# Quote of the Day App
 
-A new Flutter project.
+Welcome to the Quote of the Day app! This Flutter application provides users with a daily dose of inspiration by fetching a new quote and displaying it along with a beautiful background image. The app utilizes two APIs - one for fetching background images and another for retrieving quotes.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- **Daily Quote:** Every time you open the app, a new inspiring quote is displayed.
+- **Background Image:** The app fetches a captivating background image to complement the quote.
+- **Save to Favorites:** Save your favorite quotes to easily access them later.
+- **Add Custom Quotes:** Add your own quotes to the favorites list for personal inspiration.
+- **Share Quote:** Share a quote with friends and family via social media or messaging apps.
+- **Refresh Button:** Load a new quote and background image at any time with the refresh button.
 
-A few resources to get you started if this is your first Flutter project:
+## Screenshots
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+<div>
+  <img src="assets/snaps/1.png" alt="Screenshot 1" style="width: 300px; height: auto;">
+  <img src="assets/snaps/2.png" alt="Screenshot 2" style="width: 300px; height: auto;">
+  <img src="assets/snaps/3.png" alt="Screenshot 3" style="width: 300px; height: auto;">
+  <img src="assets/snaps/4.png" alt="Screenshot 4" style="width: 300px; height: auto;">
+  <img src="assets/snaps/5.png" alt="Screenshot 5" style="width: 300px; height: auto;">
+</div>
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## APIs Used
+
+- **Unsplash API**: Used for fetching background images.
+- **API Ninja**: Used for retrieving quotes.
