@@ -14,11 +14,11 @@ Welcome to the Quote of the Day app! This Flutter application provides users wit
 ## Screenshots
 
 <div>
-  <img src="assets/snaps/1.png" alt="Screenshot 1" style="width: 300px; height: auto;">
-  <img src="assets/snaps/2.png" alt="Screenshot 2" style="width: 300px; height: auto;">
-  <img src="assets/snaps/3.png" alt="Screenshot 3" style="width: 300px; height: auto;">
-  <img src="assets/snaps/4.png" alt="Screenshot 4" style="width: 300px; height: auto;">
-  <img src="assets/snaps/5.png" alt="Screenshot 5" style="width: 300px; height: auto;">
+  <img src="assets/snaps/1.png" alt="Screenshot 1" style="width: 250px; height: auto;">
+  <img src="assets/snaps/2.png" alt="Screenshot 2" style="width: 250px; height: auto;">
+  <img src="assets/snaps/3.png" alt="Screenshot 3" style="width: 250px; height: auto;">
+  <img src="assets/snaps/4.png" alt="Screenshot 4" style="width: 250px; height: auto;">
+  <img src="assets/snaps/5.png" alt="Screenshot 5" style="width: 250px; height: auto;">
 </div>
 
 ## APIs Used
